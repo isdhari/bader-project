@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Decoder – Professional Forensic Tool</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #e63946;
+            --dark-red: #9b1b26;
+            --bg-black: #0d0d0d;
+            --card-black: #1a1a1a;
+            --text-white: #f1f1f1;
+            --text-gray: #b0b0b0;
+            --accent-glow: rgba(230, 57, 70, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-black);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-glow);
+            border: 1px solid #333;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-red);
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        p.subtitle {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--primary-red);
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            background: #111;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #00ff41; /* Terminal green for input */
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-decode {
+            background-color: var(--primary-red);
+            color: white;
+        }
+
+        .btn-decode:hover {
+            background-color: var(--dark-red);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.4);
+        }
+
+        .btn-clear {
+            background-color: transparent;
+            color: var(--text-gray);
+            border: 1px solid #444;
+        }
+
+        .btn-clear:hover {
+            background-color: #333;
+            color: white;
+        }
+
+        #output {
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card-header {
+            color: var(--text-gray);
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+            word-break: break-all;
+        }
+
+        .result-item {
+            background: #1a1a1a;
+            border-left: 4px solid var(--primary-red);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .result-title {
+            color: var(--primary-red);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-content {
+            font-family: 'Courier New', Courier, monospace;
+            background: #0a0a0a;
+            padding: 10px;
+            border-radius: 4px;
+            color: #eee;
+            white-space: pre-wrap;
+            word-break: break-all;
+            border: 1px solid #222;
+        }
+
+        .warning {
+            border-left-color: #ffcc00;
+        }
+        .warning .result-title {
+            color: #ffcc00;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0d0d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-red);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-user-secret"></i> Cyber Decoder</h1>
+        <p class="subtitle">Advanced Forensic Analysis Tool for Digital Encodings</p>
+    </header>
+
+    <div class="input-group">
+        <label for="input">Encoded Data</label>
+        <textarea id="input" placeholder="Paste your encoded text, hex, or binary here..."></textarea>
+    </div>
+
+    <div class="button-container">
+        <button class="btn-decode" onclick="analyze()">
+            <i class="fas fa-unlock-alt"></i> Execute Decode
+        </button>
+        <button class="btn-clear" onclick="clearAll()">
+            <i class="fas fa-trash-alt"></i> Clear
+        </button>
+    </div>
+
+    <div id="output"></div>
+</div>
+
+<script>
+    // ===== Base64 UTF-8 Decoder =====
+    function decodeBase64UTF8(base64) {
+        try {
+            const binary = atob(base64);
+            const bytes = new Uint8Array([...binary].map(c => c.charCodeAt(0)));
+            return new TextDecoder("utf-8").decode(bytes);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // ===== ROT13 =====
+    function rot13(str) {
+        return str.replace(/[a-zA-Z]/g, c => {
+            const base = c <= 'Z' ? 65 : 97;
+            return String.fromCharCode((c.charCodeAt(0) - base + 13) % 26 + base);
+        });
+    }
+
+    // ===== Hex Decoder =====
+    function decodeHex(hex) {
+        try {
+            // Remove spaces or prefixes if any
+            const cleanHex = hex.replace(/0x|\s/g, '');
+            if (cleanHex.length % 2 !== 0) return null;
+            
+            let str = '';
+            for (let i = 0; i < cleanHex.length; i += 2) {
+                str += String.fromCharCode(parseInt(cleanHex.substr(i, 2), 16));
+            }
+            return str;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // ===== Binary Decoder =====
+    function decodeBinary(bin) {
+        try {
+            const cleanBin = bin.trim();
+            return cleanBin.split(/\s+/)
+                .map(b => String.fromCharCode(parseInt(b, 2)))
+                .join('');
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // ===== Analyzer =====
+    function analyze() {
+        const text = document.getElementById("input").value.trim();
+        const out = document.getElementById("output");
+        out.innerHTML = "";
+
+        if (!text) {
+            return;
+        }
+
+        const card = document.createElement("div");
+        card.className = "card";
+        
+        const header = document.createElement("div");
+        header.className = "card-header";
+        header.innerHTML = "<strong>Analyzing Input:</strong> " + escapeHtml(text.substring(0, 100)) + (text.length > 100 ? "..." : "");
+        card.appendChild(header);
+
+        let resultsFound = false;
+
+        // Base64
+        const b64 = decodeBase64UTF8(text);
+        if (b64 && isPrintable(b64)) {
+            addResult(card, "🧬 Base64 Decoded (UTF‑8)", b64, "fa-dna");
+            resultsFound = true;
+        }
+
+        // ROT13
+        const r13 = rot13(text);
+        if (r13 !== text) {
+            addResult(card, "🔄 ROT13 Decoded", r13, "fa-sync-alt");
+            resultsFound = true;
+        }
+
+        // Hex
+        const cleanHex = text.replace(/0x|\s/g, '');
+        if (/^[0-9a-fA-F]+$/.test(cleanHex)) {
+            const hex = decodeHex(text);
+            if (hex && isPrintable(hex)) {
+                addResult(card, "🧾 Hex Decoded", hex, "fa-file-invoice");
+                resultsFound = true;
+            }
+        }
+
+        // Binary
+        if (/^[01\s]+$/.test(text) && text.length >= 8) {
+            const bin = decodeBinary(text);
+            if (bin && isPrintable(bin)) {
+                addResult(card, "📡 Binary Decoded", bin, "fa-broadcast-tower");
+                resultsFound = true;
+            }
+        }
+
+        // Hash detection
+        if (/^[a-f0-9]{32}$/i.test(text)) {
+            addResult(card, "🔑 Detected Hash: MD5", "Note: MD5 is a one-way hash and cannot be reversed directly. Use a rainbow table or brute-force tool.", "fa-key", "warning");
+            resultsFound = true;
+        } else if (/^[a-f0-9]{64}$/i.test(text)) {
+            addResult(card, "🔑 Detected Hash: SHA‑256", "Note: SHA-256 is a one-way hash and cannot be reversed directly.", "fa-key", "warning");
+            resultsFound = true;
+        }
+
+        if (!resultsFound) {
+            addResult(card, "⚠️ No matches", "The input doesn't match common encoding patterns or resulted in non-readable data.", "fa-exclamation-triangle", "warning");
+        }
+
+        out.appendChild(card);
+    }
+
+    // ===== Helpers =====
+    function addResult(card, title, value, icon, extraClass = "") {
+        const div = document.createElement("div");
+        div.className = "result-item " + extraClass;
+        
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "result-title";
+        titleDiv.innerHTML = `<i class="fas ${icon}"></i> ${title}`;
+        
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "result-content";
+        contentDiv.textContent = value;
+        
+        div.appendChild(titleDiv);
+        div.appendChild(contentDiv);
+        card.appendChild(div);
+    }
+
+    function isPrintable(str) {
+        // Simple check to see if string contains mostly printable characters
+        return /^[\x20-\x7E\s\u00A0-\u00FF]*$/.test(str) && str.length > 0;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function clearAll() {
+        document.getElementById("input").value = "";
+        document.getElementById("output").innerHTML = "";
+    }
+</script>
+
+</body>
+</html>
